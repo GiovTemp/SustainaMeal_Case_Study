@@ -31,6 +31,7 @@
             <div class="form-group">
                 <label for="kSelect">Valore di K:</label>
                 <select class="form-control" id="kSelect">
+                    <option value="10">1</option>
                     <option value="10">10</option>
                     <option value="50">50</option>
                     <option value="100">100</option>
@@ -115,7 +116,7 @@
                 let inputRecipeHtml
                 let detailsHtml = '<div class="input-recipe-details">';
                 let resultHtml = '<table class="table">';
-                resultHtml += '<thead><tr><th>Nome Ricetta</th><th>who_score</th><th>healthiness_variation</th>'+
+                resultHtml += '<thead><tr><th>Nome Ricetta</th><th>nutrients_similarity</th><th>who_score</th><th>healthiness_variation</th>'+
                     '<th>sustainability_score</th><th>sustainability_label</th><th>sustainability_variation</th>'+
                     '<th>sustainameal_score</th><th>sustainameal_score_variation</th>'+
                     '</tr></thead>';
@@ -132,8 +133,10 @@
                     detailsHtml += '<h3>Dettagli Ricetta Selezionata</h3>';
                     detailsHtml += '<p><strong>Nome Ricetta:</strong> ' + results.recipe_name + '</p>';
                     detailsHtml += '<p><strong>ID Ricetta:</strong> ' + results.recipe_id + '</p>';
-                    detailsHtml += '<p><strong>Who Score:</strong> ' + results.who_score + '</p>';
+                    detailsHtml += '<p><strong>Who Score:</strong> ' + results.who_score + ' </p>';
+                    detailsHtml += '<p><strong>Healthiness Label:</strong> ' + results.healthiness_label + ' (O=altamente salutare,1=mediamente salutare,2=poco salutare)</p>';
                     detailsHtml += '<p><strong>Sustainability Score:</strong> ' + results.sustnability_score + '</p>';
+                    detailsHtml += '<p><strong>Sustnability Label:</strong> ' + results.sustnability_label + '(O=altamente sostenibile,1=mediamente sostenibile,2=poco sostenibile)</p>';
                     detailsHtml += '</div>';
 
 
@@ -144,6 +147,7 @@
                         count++;
                         resultHtml += '<tr>';
                         resultHtml += '<td>' + experiment.title + '</td>';
+                        resultHtml += '<td>' + experiment.similarity_score.toFixed(6) + '</td>';
                         resultHtml += '<td>' + experiment.who_score.toFixed(4) + '</td>';
                         resultHtml += '<td style="color:' + (experiment.healthiness_increment >= 0 ? 'green' : 'red') + ';">' + experiment.healthiness_increment.toFixed(2) + '% </td>';
                         resultHtml += '<td>' + experiment.sustainability_score.toFixed(4) + '</td>';
