@@ -1,6 +1,13 @@
 # Introduction
 This repo is the used to store the all the data and notebooks of our project called Sustainameal. This is a library that we built which is used to get the most sustainable and healthy alternative recipe to a given one.
 
+
+To navigate our experiments :
+https://giovtemp.github.io/SustainaMeal_Case_Study/experiments/results/experiments.html
+https://giovtemp.github.io/SustainaMeal_Case_Study/experiments/results/experiments_unknown_recipes.html
+https://giovtemp.github.io/SustainaMeal_Case_Study/experiments/results/experiments_gpt_rerank.html
+
+
 ## notebooks/Preprocessing.ipynb
 This file contains the code used to preprocess the dataset of the recipes, introducing also the sustainability score and the sustainability labels, computed through the dataset of ingredients, builded from the CSEL dataset. For the sustainability labels, we split the range of the values in some beans and give them a specific label
 
