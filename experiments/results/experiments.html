@@ -15,12 +15,12 @@
         <form id="selectionForm">
 
             <div class="form-group">
-                <label for="recipeSelect">Scegli Ricetta:</label>
+                <label for="recipeSelect">Chose Recipe:</label>
                 <input type="text" id="recipeSelect" class="form-control">
             </div>
 
             <div class="form-group">
-                <label for="nutrientsSelect">Tipo di Nutrienti:</label>
+                <label for="nutrientsSelect">Nutrients Configuration:</label>
                 <select class="form-control" id="nutrientsSelect">
                     <option value="calories [cal], totalFat [g], sodium [mg], dietaryFiber [g], sugars [g], protein [g]">calories [cal], totalFat [g], sodium [mg], dietaryFiber [g], sugars [g], protein [g]</option>
                     <option value="calories [cal], totalFat [g], saturatedFat [g], cholesterol [mg], sodium [mg], dietaryFiber [g], sugars [g], protein [g]">calories [cal], totalFat [g], saturatedFat [g], cholesterol [mg], sodium [mg], dietaryFiber [g], sugars [g], protein [g]</option>
@@ -29,9 +29,9 @@
 
 
             <div class="form-group">
-                <label for="kSelect">Valore di K:</label>
+                <label for="kSelect">K (candidates):</label>
                 <select class="form-control" id="kSelect">
-                    <option value="10">1</option>
+                    <option value="1">1</option>
                     <option value="10">10</option>
                     <option value="50">50</option>
                     <option value="100">100</option>
@@ -41,7 +41,7 @@
                 <input type="checkbox" class="form-check-input" id="matchAllTagsCheck">
                 <label class="form-check-label" for="matchAllTagsCheck">Match All Tags</label>
             </div>
-            <button type="button" id="submitButton" class="btn btn-primary">Aggiorna Risultati</button>
+            <button type="button" id="submitButton" class="btn btn-primary">Update Results</button>
         </form>
 
         <!-- Sezione per i Risultati -->
@@ -116,9 +116,9 @@
                 let inputRecipeHtml
                 let detailsHtml = '<div class="input-recipe-details">';
                 let resultHtml = '<table class="table">';
-                resultHtml += '<thead><tr><th>Nome Ricetta</th><th>nutrients_similarity</th><th>who_score</th><th>healthiness_variation</th>'+
-                    '<th>sustainability_score</th><th>sustainability_label</th><th>sustainability_variation</th>'+
-                    '<th>sustainameal_score</th><th>sustainameal_score_variation</th>'+
+                resultHtml += '<thead><tr><th>Recipe Name</th><th>Nutrient Similarity</th><th>WHO Score</th><th>Healthiness Variation (%)</th>' +
+                    '<th>Sustainability Score</th><th>Sustainability Label</th><th>Sustainability Variation (%)</th>' +
+                    '<th>SustainaMeal Score</th><th>SustainaMeal Score Variation (%)</th>' +
                     '</tr></thead>';
                 resultHtml += '<tbody>';
 
@@ -130,13 +130,13 @@
                 filteredData.forEach(function(results) {
                     // HTML per mostrare i dettagli della ricetta in input
                   
-                    detailsHtml += '<h3>Dettagli Ricetta Selezionata</h3>';
-                    detailsHtml += '<p><strong>Nome Ricetta:</strong> ' + results.recipe_name + '</p>';
-                    detailsHtml += '<p><strong>ID Ricetta:</strong> ' + results.recipe_id + '</p>';
-                    detailsHtml += '<p><strong>Who Score:</strong> ' + results.who_score + ' </p>';
-                    detailsHtml += '<p><strong>Healthiness Label:</strong> ' + results.healthiness_label + ' (O=altamente salutare,1=mediamente salutare,2=poco salutare)</p>';
+                    detailsHtml += '<h3>Selected Recipe Details</h3>';
+                    detailsHtml += '<p><strong>Recipe Name:</strong> ' + results.recipe_name + '</p>';
+                    detailsHtml += '<p><strong>Recipe ID:</strong> ' + results.recipe_id + '</p>';
+                    detailsHtml += '<p><strong>WHO Score:</strong> ' + results.who_score + '</p>';
+                    detailsHtml += '<p><strong>Healthiness Label:</strong> ' + results.healthiness_label + ' (0=highly healthy, 1=moderately healthy, 2=not healthy)</p>';
                     detailsHtml += '<p><strong>Sustainability Score:</strong> ' + results.sustnability_score + '</p>';
-                    detailsHtml += '<p><strong>Sustnability Label:</strong> ' + results.sustnability_label + '(O=altamente sostenibile,1=mediamente sostenibile,2=poco sostenibile)</p>';
+                    detailsHtml += '<p><strong>Sustainability Label:</strong> ' + results.sustnability_label + ' (0=highly sustainable, 1=moderately sustainable, 2=not sustainable)</p>';
                     detailsHtml += '</div>';
 
 
@@ -157,13 +157,13 @@
                         let sustainabilityColor;
                         if (experiment.sustainability_score < 0.2) {
                             sustainabilityStatus = 'LOW';
-                            sustainabilityColor = 'green';
+                            sustainabilityColor = 'red';
                         } else if (experiment.sustainability_score >= 0.2 && experiment.sustainability_score < 0.5) {
                             sustainabilityStatus = 'MEDIUM';
                             sustainabilityColor = 'orange';
                         } else {
                             sustainabilityStatus = 'HIGH';
-                            sustainabilityColor = 'red';
+                            sustainabilityColor = 'green';
                         }
 
                         resultHtml += '<td style="color:' + sustainabilityColor + ';">' + sustainabilityStatus + '</td>';
@@ -181,7 +181,7 @@
 
                 // Aggiungi le medie al tuo HTML
                 resultHtml += '<tr>';
-                resultHtml += '<td>Media Incrementi:</td>';
+                resultHtml += '<td>Average Variations:</td>';
                 resultHtml += `<td></td>`; // Colonna vuota per allineare con l'intestazione
                 resultHtml += `<td style="color:${averageHealthinessIncrement >= 0 ? 'green' : 'red'};">${averageHealthinessIncrement}%</td>`;
                 resultHtml += `<td></td>`; // Colonna vuota
@@ -193,7 +193,8 @@
                 resultHtml += '</tbody></table>';
                 resultsDiv.html(detailsHtml + resultHtml);
             } else {
-                resultsDiv.html('<p>Nessun risultato corrispondente trovato.</p>');
+                resultsDiv.html('<p>No matching results found.</p>');
+
             }
         }
 

@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esperimenti con Ricette</title>
+    <title>Recipe ReRank Experiments</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>Esperimenti con ReRank di Ricette</h1>
-        
+        <h1>Recipe ReRank Experiments</h1>
+       
         <!-- Form di Selezione -->
         <form id="selectionForm">
             <div class="form-group">
-                <label for="recipeSelect">Scegli Ricetta:</label>
+                <label for="recipeSelect">Chose Recipe:</label>
                 <select class="form-control" id="recipeSelect">
                     <!-- Le opzioni verranno aggiunte qui tramite JavaScript -->
                 </select>
             </div>
 
-            <button type="button" id="submitButton" class="btn btn-primary">Aggiorna Risultati</button>
+            <button type="button" id="submitButton" class="btn btn-primary">Update Results</button>
         </form>
 
         <!-- Sezione per i Risultati -->
@@ -68,43 +68,46 @@
     if (filteredData.length > 0) {
         // Mostra i dettagli della ricetta in input
         let inputRecipeHtml = '<div class="input-recipe-details">';
-        inputRecipeHtml += `<h3>Dettagli Ricetta Selezionata: ${selectedRecipeName}</h3>`;
+            inputRecipeHtml += `<h3>Selected Recipe Details: ${selectedRecipeName}</h3>`;
+
         // Aggiungi altri dettagli della ricetta in input qui
         inputRecipeHtml += '</div>';
 
         resultsDiv.append(inputRecipeHtml);
 
-                // Supponiamo che le informazioni dettagliate siano disponibili nel primo elemento di filteredData
-                const recipeDetails = filteredData[0];
+            // Supponiamo che le informazioni dettagliate siano disponibili nel primo elemento di filteredData
+            const recipeDetails = filteredData[0];
 
             // Mostra i dettagli della ricetta selezionata
+
             let detailsHtml = '<div class="input-recipe-details">';
-            detailsHtml += '<p><strong>Nome Ricetta:</strong> ' + recipeDetails.recipe_name + '</p>';
-            detailsHtml += '<p><strong>ID Ricetta:</strong> ' + recipeDetails.recipe_id + '</p>';
-            detailsHtml += '<p><strong>Who Score:</strong> ' + recipeDetails.who_score.toFixed(3) + ' </p>';
-            detailsHtml += '<p><strong>Healthiness Label:</strong> ' + recipeDetails.healthiness_label + ' (0=altamente salutare, 1=mediamente salutare, 2=poco salutare)</p>';
+            detailsHtml += '<p><strong>Recipe Name:</strong> ' + recipeDetails.recipe_name + '</p>';
+            detailsHtml += '<p><strong>Recipe ID:</strong> ' + recipeDetails.recipe_id + '</p>';
+            detailsHtml += '<p><strong>Who Score:</strong> ' + recipeDetails.who_score.toFixed(3) + '</p>';
+            detailsHtml += '<p><strong>Healthiness Label:</strong> ' + recipeDetails.healthiness_label + ' (0=highly healthy, 1=moderately healthy, 2=not healthy)</p>';
             detailsHtml += '<p><strong>Sustainability Score:</strong> ' + recipeDetails.sustnability_score.toFixed(3) + '</p>';
-            detailsHtml += '<p><strong>Sustainability Label:</strong> ' + recipeDetails.sustnability_label + ' (0=altamente sostenibile, 1=mediamente sostenibile, 2=poco sostenibile)</p>';
+            detailsHtml += '<p><strong>Sustainability Label:</strong> ' + recipeDetails.sustnability_label + ' (0=highly sustainable, 1=moderately sustainable, 2=not sustainable)</p>';
             detailsHtml += '</div>';
 
             resultsDiv.append(detailsHtml);
 
                     // Aggiungi la descrizione del logo di GPT
         let gptDescriptionHtml = '<div class="gpt-logo-description" style="margin-top: 20px;">';
-        gptDescriptionHtml += '<img src="images/gpt-logo.png" alt="GPT Logo" style="width: 20px; height: 20px; vertical-align: middle;"/> indica la ricetta scelta da GPT-3.5-turbo come la più consigliata.';
+        gptDescriptionHtml += '<img src="images/gpt-logo.png" alt="GPT Logo" style="width: 20px; height: 20px; vertical-align: middle;"/> indicates the recipe chosen by GPT-3.5-turbo as the most recommended.';
         gptDescriptionHtml += '</div>';
 
         resultsDiv.append(gptDescriptionHtml);
 
         // Inizia la tabella dei risultati
         let tableHtml = '<table class="table">';
-        tableHtml += '<thead><tr><th>Titolo</th><th>Score di Similarità</th><th>Incremento di Salubrità (%)</th><th>Incremento di Sostenibilità (%)</th><th>Incremento di Score SustainaMeal (%)</th></tr></thead>';
+        tableHtml += '<thead><tr><th>Title</th><th>Similarity Score</th><th>Healthiness Increase (%)</th><th>Sustainability Increase (%)</th><th>SustainaMeal Score Increase (%)</th></tr></thead>';
         tableHtml += '<tbody>';
 
         filteredData.forEach(function(experiment) {
             experiment.ordered_by_sustainameal.forEach(function(recipe) {
                 const getColor = (value) => value > 0 ? 'style="color:green;"' : 'style="color:red;"';
-                let gptLogoHtml = recipe.title === experiment.gpt_choice ? '<img src="images/gpt-logo.png" alt="GPT Logo" style="width: 20px; height: 20px; margin-right: 5px;"/>' : '';
+                let condition = experiment.gpt_choice.toLowerCase().includes(recipe.title.toLowerCase()) || recipe.title.toLowerCase().includes(experiment.gpt_choice.toLowerCase());
+                let gptLogoHtml = condition ? '<img src="images/gpt-logo.png" alt="GPT Logo" style="width: 20px; height: 20px; margin-right: 5px;"/>' : '';
 
                 tableHtml += '<tr>';
                 tableHtml += `<td>${gptLogoHtml}${recipe.title}</td>`;
@@ -121,7 +124,8 @@
 
 
     } else {
-        resultsDiv.html('<p>Nessun risultato corrispondente trovato.</p>');
+        resultsDiv.html('<p>No matching results found.</p>');
+
     }
 }
 
